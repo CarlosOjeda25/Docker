@@ -1,0 +1,14 @@
+docker build -t flask_app .
+
+docker run -p 5550:5550 flask_app
+
+docker-compose build
+
+docker-compose up
+
+docker-compose down
+
+docker-compose long
+
+docker-compose down -V
+
