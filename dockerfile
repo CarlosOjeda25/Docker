@@ -1,5 +1,5 @@
 #imagen DESCARGA LA IMAGEN DE DOCKER A USAR
-From python:3.11
+FROM python:3.11
 
 #Establece el directorio de trabajo
 WORKDIR /app
