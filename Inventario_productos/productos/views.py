@@ -1,10 +1,12 @@
-from django.shortcuts import render, get_list_or_404, redirect
+from django.shortcuts import render, get_list_or_404, redirect, get_object_or_404
 from django.contrib import messages
 from django.views.generic import ListView, DeleteView
 from django.urls import reverse_lazy
-from json import JsonResponse
-
-from.models import Producto
+from django.http import JsonResponse
+import json
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from .models import Producto
 from .serializers import ProductoSerializer
 from rest_framework import generics
 
@@ -23,9 +25,9 @@ class ProductoDeleteAPIView(generics.DestroyAPIView):
 #Html views para frontend
 class ProductoListView(ListView):
     model = Producto
-    template_name = 'productos/producto_list-html'
+    template_name = 'productos/producto_list.html'
     context_object_name = 'productos'
-    ordeingring = ['-creado']
+    ordering = ['-creado']
     
 class DemoView(ListView):
     model = Producto
@@ -35,8 +37,8 @@ class DemoView(ListView):
 
 class ProductoDeleteView(DeleteView):
     model = Producto
-    template_name = 'productos/producto_confirm_delete-html'
-    success_url = reverse_lazy('producto-list.html')
+    template_name = 'productos/producto_confirm_delete.html'
+    success_url = reverse_lazy('producto-list-html')
     context_object_name = 'producto'
 
     def delete(self, request, *args, **kwargs):
@@ -52,8 +54,7 @@ class ProductoAjaxView(generics.GenericAPIView):
     serializer_class = ProductoSerializer
 
     def post(self, request, *args, **kwargs):
-        """Crear nuevo producto via AJAX"""
-        
+        """Crear nuevo producto via AJAX"""   
         try:
             data ={
                 'nombre': request.POST.get('nombre'),
@@ -61,35 +62,40 @@ class ProductoAjaxView(generics.GenericAPIView):
                 'precio': request.POST.get('precio'),
             }
 
-            producto =  property.objects.create(**data)
+            producto =  Producto.objects.create(**data)
             return JsonResponse({
                 'id': producto.id,
                 'nombre': producto.nombre,
                 'descripcion': producto.descripcion,
                 'precio': str(producto.precio),
-                'creado': producto.creado.strftime('%Y-%m-%d %H:%M:%S')
+                'creado': producto.creado.strftime('%d/%m/%Y %H:%M')
             })
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
         
 
-    def put(self, request, *args, **kwargs):
-        """Crear nuevo producto via AJAX"""
-        
-        try:
-            data ={
-                'nombre': request.POST.get('nombre'),
-                'descripcion': request.POST.get('descripcion',''),
-                'precio': request.POST.get('precio'),
-            }
+    def put(self, request, pk, *args, **kwargs):
+        """actualizar producto via AJAX"""
 
-            producto =  property.objects.create(**data)
-            return JsonResponse({
-                'id': producto.id,
-                'nombre': producto.nombre,
-                'descripcion': producto.descripcion,
-                'precio': str(producto.precio),
-                'creado': producto.creado.strftime('%Y-%m-%d %H:%M:%S')
-            })
+        try:
+            producto = get_object_or_404(Producto, pk=pk)
+
+            data = json.loads(request.body)
+
+            # Filtrar datos no necesarios para la actualización
+            update_data = {k: v for k, v in data.items() if k not in ['id', 'csrfmiddlewaretoken']}
+
+            serializer = ProductoSerializer(producto, data=update_data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return JsonResponse({
+                    'id': producto.id,
+                    'nombre': producto.nombre,
+                    'descripcion': producto.descripcion,
+                    'precio': str(producto.precio),
+                    'creado': producto.creado.strftime('%d/%m/%Y %H:%M')
+                })
+            else:
+                return JsonResponse(serializer.errors, status=400)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
