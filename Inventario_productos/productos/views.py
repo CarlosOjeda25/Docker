@@ -60,6 +60,7 @@ class ProductoAjaxView(generics.GenericAPIView):
                 'nombre': request.POST.get('nombre'),
                 'descripcion': request.POST.get('descripcion',''),
                 'precio': request.POST.get('precio'),
+                'cantidad': request.POST.get('cantidad',1)
             }
 
             producto =  Producto.objects.create(**data)
@@ -68,6 +69,7 @@ class ProductoAjaxView(generics.GenericAPIView):
                 'nombre': producto.nombre,
                 'descripcion': producto.descripcion,
                 'precio': str(producto.precio),
+                'cantidad': producto.cantidad,
                 'creado': producto.creado.strftime('%d/%m/%Y %H:%M')
             })
         except Exception as e:
@@ -93,6 +95,7 @@ class ProductoAjaxView(generics.GenericAPIView):
                     'nombre': producto.nombre,
                     'descripcion': producto.descripcion,
                     'precio': str(producto.precio),
+                    'cantidad': producto.cantidad,
                     'creado': producto.creado.strftime('%d/%m/%Y %H:%M')
                 })
             else:
