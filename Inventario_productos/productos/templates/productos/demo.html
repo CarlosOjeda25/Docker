@@ -3,59 +3,86 @@
 {% block title %}Demo del Frontend - Inventario{% endblock %}
 
 {% block content %}
-<div class="row">
+<!-- Hero Section -->
+<div class="row mb-5">
     <div class="col-12">
-        <div class="jumbotron bg-primary text-white p-5 rounded mb-5">
-            <h1 class="display-4">
-                <i class="fas fa-rocket me-3"></i>
-                ¡Bienvenido al Sistema de Inventario!
-            </h1>
-            <p class="lead">Una interfaz moderna y completa para gestionar tus productos</p>
-            <hr class="my-4" style="border-color: rgba(255, 255, 255, 0.3);">
-            <p>Explora todas las funcionalidades disponibles con esta demostración interactiva.</p>
-            <a class="btn btn-light btn-lg" href="{% url 'producto-list-html' %}" role="button">
-                <i class="fas fa-play me-2"></i>
-                Comenzar Demo
-            </a>
+        <div class="card border-0 shadow-lg overflow-hidden">
+            <div class="card-body p-0">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 4rem 2rem; color: white; position: relative;">
+                    <div class="text-center">
+                        <i class="fas fa-rocket fa-4x mb-4" style="opacity: 0.9;"></i>
+                        <h1 class="display-4 fw-bold mb-3" style="text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);">
+                            ¡Bienvenido al Sistema de Inventario!
+                        </h1>
+                        <p class="lead mb-4" style="font-size: 1.25rem; opacity: 0.95;">
+                            Una interfaz moderna y completa para gestionar tus productos
+                        </p>
+                        <hr class="my-4" style="border-color: rgba(255, 255, 255, 0.3); width: 100px; margin: 0 auto;">
+                        <p class="mb-4" style="font-size: 1.1rem;">
+                            Explora todas las funcionalidades disponibles con esta demostración interactiva.
+                        </p>
+                        <a class="btn btn-light btn-lg px-4 py-3 shadow" href="{% url 'producto-list-html' %}" role="button" style="border-radius: 50px;">
+                            <i class="fas fa-play me-2"></i>
+                            Comenzar Demo
+                            <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                    <!-- Decorative elements -->
+                    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(255, 255, 255, 0.1); border-radius: 50%;"></div>
+                    <div style="position: absolute; bottom: -30px; left: -30px; width: 150px; height: 150px; background: rgba(255, 255, 255, 0.05); border-radius: 50%;"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-4 mb-4">
-        <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body text-center">
-                <i class="fas fa-list fa-3x text-primary mb-3"></i>
-                <h5 class="card-title">Vista de Lista</h5>
-                <p class="card-text">Visualiza todos tus productos en un diseño de tarjetas responsivo con información detallada.</p>
-                <a href="{% url 'producto-list-html' %}" class="btn btn-outline-primary">
-                    <i class="fas fa-eye me-1"></i> Ver Lista
+        <div class="card h-100 border-0 shadow-lg">
+            <div class="card-body text-center p-4">
+                <div class="mb-4">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);">
+                        <i class="fas fa-list fa-2x text-white"></i>
+                    </div>
+                </div>
+                <h5 class="card-title fw-bold mb-3">Vista de Lista</h5>
+                <p class="card-text text-muted mb-4">Visualiza todos tus productos en un diseño de tarjetas responsivo con información detallada de costos, proveedores y ganancias.</p>
+                <a href="{% url 'producto-list-html' %}" class="btn btn-primary px-4 py-2">
+                    <i class="fas fa-eye me-2"></i> Ver Lista
                 </a>
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-4 mb-4">
-        <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body text-center">
-                <i class="fas fa-plus-circle fa-3x text-success mb-3"></i>
-                <h5 class="card-title">Agregar Productos</h5>
-                <p class="card-text">Utiliza modales interactivos para agregar nuevos productos de forma rápida y sencilla.</p>
-                <button class="btn btn-outline-success" onclick="showFeatureDemo('add')">
-                    <i class="fas fa-plus me-1"></i> Ver Demo
+        <div class="card h-100 border-0 shadow-lg">
+            <div class="card-body text-center p-4">
+                <div class="mb-4">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #28a745, #20c997); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);">
+                        <i class="fas fa-plus-circle fa-2x text-white"></i>
+                    </div>
+                </div>
+                <h5 class="card-title fw-bold mb-3">Agregar Productos</h5>
+                <p class="card-text text-muted mb-4">Utiliza modales interactivos organizados por secciones para agregar nuevos productos con toda su información financiera.</p>
+                <button class="btn btn-success px-4 py-2" onclick="showFeatureDemo('add')">
+                    <i class="fas fa-plus me-2"></i> Ver Demo
                 </button>
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-4 mb-4">
-        <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body text-center">
-                <i class="fas fa-edit fa-3x text-warning mb-3"></i>
-                <h5 class="card-title">Editar Productos</h5>
-                <p class="card-text">Modifica la información de tus productos existentes con formularios pre-completados.</p>
-                <button class="btn btn-outline-warning" onclick="showFeatureDemo('edit')">
-                    <i class="fas fa-edit me-1"></i> Ver Demo
+        <div class="card h-100 border-0 shadow-lg">
+            <div class="card-body text-center p-4">
+                <div class="mb-4">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #007bff, #6610f2); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);">
+                        <i class="fas fa-edit fa-2x text-white"></i>
+                    </div>
+                </div>
+                <h5 class="card-title fw-bold mb-3">Editar Productos</h5>
+                <p class="card-text text-muted mb-4">Modifica la información de tus productos existentes con formularios pre-completados y validación en tiempo real.</p>
+                <button class="btn btn-primary px-4 py-2" onclick="showFeatureDemo('edit')">
+                    <i class="fas fa-edit me-2"></i> Ver Demo
                 </button>
             </div>
         </div>
@@ -64,26 +91,34 @@
 
 <div class="row mt-4">
     <div class="col-md-6 mb-4">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body text-center">
-                <i class="fas fa-trash-alt fa-3x text-danger mb-3"></i>
-                <h5 class="card-title">Eliminación Segura</h5>
-                <p class="card-text">Páginas dedicadas de confirmación con doble verificación para eliminar productos de forma segura.</p>
-                <button class="btn btn-outline-danger" onclick="showFeatureDemo('delete')">
-                    <i class="fas fa-trash me-1"></i> Ver Demo
+        <div class="card border-0 shadow-lg h-100">
+            <div class="card-body text-center p-4">
+                <div class="mb-4">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #dc3545, #c82333); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3);">
+                        <i class="fas fa-shield-alt fa-2x text-white"></i>
+                    </div>
+                </div>
+                <h5 class="card-title fw-bold mb-3">Eliminación Segura</h5>
+                <p class="card-text text-muted mb-4">Páginas dedicadas de confirmación con doble verificación y vista completa del producto antes de eliminar.</p>
+                <button class="btn btn-danger px-4 py-2" onclick="showFeatureDemo('delete')">
+                    <i class="fas fa-trash me-2"></i> Ver Demo
                 </button>
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-6 mb-4">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body text-center">
-                <i class="fas fa-mobile-alt fa-3x text-info mb-3"></i>
-                <h5 class="card-title">Diseño Responsivo</h5>
-                <p class="card-text">Interfaz optimizada para todos los dispositivos: móviles, tablets y computadoras de escritorio.</p>
-                <button class="btn btn-outline-info" onclick="showFeatureDemo('responsive')">
-                    <i class="fas fa-mobile me-1"></i> Ver Demo
+        <div class="card border-0 shadow-lg h-100">
+            <div class="card-body text-center p-4">
+                <div class="mb-4">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #17a2b8, #138496); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(23, 162, 184, 0.3);">
+                        <i class="fas fa-mobile-alt fa-2x text-white"></i>
+                    </div>
+                </div>
+                <h5 class="card-title fw-bold mb-3">Diseño Responsivo</h5>
+                <p class="card-text text-muted mb-4">Interfaz completamente optimizada para todos los dispositivos con diseño moderno y fluido.</p>
+                <button class="btn btn-info px-4 py-2" onclick="showFeatureDemo('responsive')">
+                    <i class="fas fa-mobile me-2"></i> Ver Demo
                 </button>
             </div>
         </div>
@@ -92,28 +127,72 @@
 
 <div class="row mt-5">
     <div class="col-12">
-        <div class="card border-0 bg-light">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <i class="fas fa-rocket text-primary me-2"></i>
-                    Características Técnicas
-                </h5>
-                <div class="row">
+        <div class="card border-0 shadow-lg">
+            <div class="card-body p-5" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef);">
+                <div class="text-center mb-4">
+                    <div style="width: 100px; height: 100px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);">
+                        <i class="fas fa-cogs fa-3x text-white"></i>
+                    </div>
+                </div>
+                <h3 class="card-title text-center fw-bold mb-4" style="color: #495057;">
+                    <i class="fas fa-rocket text-primary me-3"></i>
+                    Características Técnicas Avanzadas
+                </h3>
+                <div class="row g-4">
                     <div class="col-md-6">
-                        <ul class="list-unstyled">
-                            <li><i class="fas fa-check text-success me-2"></i> Bootstrap 5 para diseño responsivo</li>
-                            <li><i class="fas fa-check text-success me-2"></i> Font Awesome para iconografía</li>
-                            <li><i class="fas fa-check text-success me-2"></i> AJAX para operaciones sin recarga</li>
-                            <li><i class="fas fa-check text-success me-2"></i> Django REST Framework para API</li>
-                        </ul>
+                        <div class="card border-0 bg-white shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-layer-group fa-2x text-primary mb-3"></i>
+                                <h6 class="fw-bold mb-3">Tecnologías Frontend</h6>
+                                <ul class="list-unstyled text-start">
+                                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> <strong>Bootstrap 5</strong> - Diseño responsivo moderno</li>
+                                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> <strong>Font Awesome 6</strong> - Iconografía profesional</li>
+                                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> <strong>AJAX</strong> - Operaciones sin recarga</li>
+                                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> <strong>CSS Grid/Flexbox</strong> - Layouts avanzados</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <ul class="list-unstyled">
-                            <li><i class="fas fa-check text-success me-2"></i> Validación de formularios en tiempo real</li>
-                            <li><i class="fas fa-check text-success me-2"></i> Mensajes de confirmación y error</li>
-                            <li><i class="fas fa-check text-success me-2"></i> Estados de carga en botones</li>
-                            <li><i class="fas fa-check text-success me-2"></i> Navegación con breadcrumbs</li>
-                        </ul>
+                        <div class="card border-0 bg-white shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-server fa-2x text-info mb-3"></i>
+                                <h6 class="fw-bold mb-3">Tecnologías Backend</h6>
+                                <ul class="list-unstyled text-start">
+                                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> <strong>Django REST</strong> - API robusta</li>
+                                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> <strong>PostgreSQL</strong> - Base de datos avanzada</li>
+                                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> <strong>Docker</strong> - Contenedorización</li>
+                                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> <strong>Validación</strong> - Seguridad de datos</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card border-0 bg-gradient shadow-sm" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));">
+                            <div class="card-body text-center py-4">
+                                <h6 class="fw-bold mb-2" style="color: #495057;">Funcionalidades Especiales</h6>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <i class="fas fa-shield-alt fa-2x text-success mb-2"></i>
+                                        <small class="d-block text-muted">Validación en tiempo real</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <i class="fas fa-bell fa-2x text-warning mb-2"></i>
+                                        <small class="d-block text-muted">Notificaciones inteligentes</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <i class="fas fa-spinner fa-2x text-info mb-2"></i>
+                                        <small class="d-block text-muted">Estados de carga</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <i class="fas fa-mobile fa-2x text-primary mb-2"></i>
+                                        <small class="d-block text-muted">100% responsivo</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -124,17 +203,29 @@
 <!-- Modal de demo de características -->
 <div class="modal fade" id="featureModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="featureModalTitle">Demo de Característica</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-gradient text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-star fa-2x"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-0" id="featureModalTitle">Demo de Característica</h4>
+                        <small class="opacity-75">Explora las funcionalidades del sistema</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body" id="featureModalBody">
+            <div class="modal-body p-4" id="featureModalBody">
                 <!-- El contenido se cargará dinámicamente -->
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <a href="{% url 'producto-list-html' %}" class="btn btn-primary">Probar en Vivo</a>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Cerrar
+                </button>
+                <a href="{% url 'producto-list-html' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-play me-2"></i>Probar en Vivo
+                </a>
             </div>
         </div>
     </div>
@@ -153,60 +244,156 @@ function showFeatureDemo(feature) {
             title: '➕ Agregar Productos',
             content: `
                 <div class="text-center mb-4">
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='150' viewBox='0 0 200 150'%3E%3Crect width='200' height='150' fill='%23f8f9fa'/%3E%3Ctext x='100' y='75' text-anchor='middle' fill='%23666' font-size='14'%3EModal de Agregar%3C/text%3E%3C/svg%3E" alt="Add Product Demo" class="img-fluid rounded">
+                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #28a745, #20c997); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);">
+                        <i class="fas fa-plus-circle fa-3x text-white"></i>
+                    </div>
                 </div>
-                <p><strong>Funcionalidad:</strong> Modal interactivo para agregar nuevos productos</p>
-                <ul>
-                    <li>Formulario con validación en tiempo real</li>
-                    <li>Campos: Nombre, Descripción, Precio, Cantidad</li>
-                    <li>Estados de carga durante el envío</li>
-                    <li>Confirmación visual de éxito</li>
-                </ul>
+                <h5 class="text-center fw-bold mb-4" style="color: #28a745;">Modal Interactivo de Agregado</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-primary mb-3">📋 Información Básica</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Nombre del producto</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Descripción detallada</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Proveedor</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-success mb-3">💰 Información Financiera</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Costo de adquisición</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Precio de venta</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Porcentaje de ganancia</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="alert alert-info border-0 mt-4" style="background: linear-gradient(135deg, rgba(23, 162, 184, 0.1), rgba(19, 132, 150, 0.1));">
+                    <i class="fas fa-lightbulb text-info me-2"></i>
+                    <strong>Características avanzadas:</strong> Validación en tiempo real, estados de carga, confirmación visual y formulario organizado por secciones.
+                </div>
             `
         },
         'edit': {
             title: '✏️ Editar Productos',
             content: `
                 <div class="text-center mb-4">
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='150' viewBox='0 0 200 150'%3E%3Crect width='200' height='150' fill='%23fff3cd'/%3E%3Ctext x='100' y='75' text-anchor='middle' fill='%23856404' font-size='14'%3EModal de Editar%3C/text%3E%3C/svg%3E" alt="Edit Product Demo" class="img-fluid rounded">
+                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #007bff, #6610f2); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);">
+                        <i class="fas fa-edit fa-3x text-white"></i>
+                    </div>
                 </div>
-                <p><strong>Funcionalidad:</strong> Edición rápida con formularios pre-completados</p>
-                <ul>
-                    <li>Formulario pre-completado con datos actuales</li>
-                    <li>Actualización vía AJAX</li>
-                    <li>Feedback inmediato de cambios</li>
-                    <li>Validación de datos modificados</li>
-                </ul>
+                <h5 class="text-center fw-bold mb-4" style="color: #007bff;">Edición Avanzada de Productos</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-primary mb-3">🔄 Actualización Inteligente</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Formulario pre-completado</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Todos los campos editables</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Actualización vía AJAX</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Validación en tiempo real</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-info mb-3">📊 Campos Gestionables</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Información básica completa</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Datos financieros actualizables</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Control de inventario</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Proveedor modificable</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="alert alert-warning border-0 mt-4" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 235, 59, 0.1));">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    <strong>Actualización segura:</strong> Los cambios se aplican inmediatamente con feedback visual y manejo de errores avanzado.
+                </div>
             `
         },
         'delete': {
             title: '🗑️ Eliminación Segura',
             content: `
                 <div class="text-center mb-4">
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='150' viewBox='0 0 200 150'%3E%3Crect width='200' height='150' fill='%23f8d7da'/%3E%3Ctext x='100' y='75' text-anchor='middle' fill='%23721c24' font-size='14'%3EPágina de Confirmación%3C/text%3E%3C/svg%3E" alt="Delete Product Demo" class="img-fluid rounded">
+                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #dc3545, #c82333); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3);">
+                        <i class="fas fa-shield-alt fa-3x text-white"></i>
+                    </div>
                 </div>
-                <p><strong>Funcionalidad:</strong> Página dedicada para confirmación de eliminación</p>
-                <ul>
-                    <li>Vista completa del producto a eliminar</li>
-                    <li>Doble confirmación para mayor seguridad</li>
-                    <li>Información sobre las consecuencias</li>
-                    <li>Navegación clara para cancelar</li>
-                </ul>
+                <h5 class="text-center fw-bold mb-4" style="color: #dc3545;">Sistema de Eliminación Seguro</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-danger mb-3">🛡️ Medidas de Seguridad</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Página de confirmación dedicada</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Doble verificación requerida</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Vista completa del producto</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Información de consecuencias</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-warning mb-3">📋 Información Mostrada</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Nombre y descripción</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Datos financieros completos</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Información del proveedor</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Fecha de creación</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="alert alert-danger border-0 mt-4" style="background: linear-gradient(135deg, rgba(220, 53, 69, 0.1), rgba(200, 35, 51, 0.1));">
+                    <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                    <strong>Protección máxima:</strong> La eliminación requiere confirmación explícita y muestra toda la información del producto antes de proceder.
+                </div>
             `
         },
         'responsive': {
-            title: '📱 Diseño Responsivo',
+            title: '📱 Diseño Completamente Responsivo',
             content: `
                 <div class="text-center mb-4">
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='150' viewBox='0 0 200 150'%3E%3Crect width='200' height='150' fill='%23d1ecf1'/%3E%3Ctext x='100' y='75' text-anchor='middle' fill='%230c5460' font-size='14'%3EResponsive Design%3C/text%3E%3C/svg%3E" alt="Responsive Demo" class="img-fluid rounded">
+                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #17a2b8, #138496); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(23, 162, 184, 0.3);">
+                        <i class="fas fa-mobile-alt fa-3x text-white"></i>
+                    </div>
                 </div>
-                <p><strong>Funcionalidad:</strong> Adaptación automática a diferentes dispositivos</p>
-                <ul>
-                    <li>📱 Móviles: Layout de 1 columna</li>
-                    <li>📱 Tablets: Layout de 2 columnas</li>
-                    <li>💻 Desktop: Layout de 3 columnas</li>
-                    <li>🔄 Navegación colapsible en móviles</li>
-                </ul>
+                <h5 class="text-center fw-bold mb-4" style="color: #17a2b8;">Experiencia Multi-Dispositivo</h5>
+                <div class="row text-center mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-0 bg-light h-100">
+                            <div class="card-body">
+                                <i class="fas fa-mobile fa-2x text-primary mb-2"></i>
+                                <h6 class="fw-bold">Móviles</h6>
+                                <small class="text-muted">Layout de 1 columna optimizado</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-0 bg-light h-100">
+                            <div class="card-body">
+                                <i class="fas fa-tablet fa-2x text-info mb-2"></i>
+                                <h6 class="fw-bold">Tablets</h6>
+                                <small class="text-muted">Layout de 2 columnas adaptativo</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-0 bg-light h-100">
+                            <div class="card-body">
+                                <i class="fas fa-desktop fa-2x text-success mb-2"></i>
+                                <h6 class="fw-bold">Desktop</h6>
+                                <small class="text-muted">Layout de 3 columnas completo</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-0 bg-light h-100">
+                            <div class="card-body">
+                                <i class="fas fa-expand fa-2x text-warning mb-2"></i>
+                                <h6 class="fw-bold">4K</h6>
+                                <small class="text-muted">Soporte para pantallas grandes</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-info border-0" style="background: linear-gradient(135deg, rgba(23, 162, 184, 0.1), rgba(19, 132, 150, 0.1));">
+                    <i class="fas fa-magic text-info me-2"></i>
+                    <strong>Adaptación inteligente:</strong> Bootstrap 5 Grid System, CSS Flexbox, media queries avanzadas y componentes responsivos garantizan una experiencia perfecta en cualquier dispositivo.
+                </div>
             `
         }
     };

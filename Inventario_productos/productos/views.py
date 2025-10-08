@@ -54,13 +54,16 @@ class ProductoAjaxView(generics.GenericAPIView):
     serializer_class = ProductoSerializer
 
     def post(self, request, *args, **kwargs):
-        """Crear nuevo producto via AJAX"""   
+        """Crear nuevo producto via AJAX"""
         try:
             data ={
                 'nombre': request.POST.get('nombre'),
                 'descripcion': request.POST.get('descripcion',''),
                 'precio': request.POST.get('precio'),
-                'cantidad': request.POST.get('cantidad',1)
+                'cantidad': request.POST.get('cantidad',1),
+                'costo': request.POST.get('costo', 0.00),
+                'proveedor': request.POST.get('proveedor', ''),
+                'porcentaje_ganancia': request.POST.get('porcentaje_ganancia', 0.00)
             }
 
             producto =  Producto.objects.create(**data)
@@ -70,6 +73,9 @@ class ProductoAjaxView(generics.GenericAPIView):
                 'descripcion': producto.descripcion,
                 'precio': str(producto.precio),
                 'cantidad': producto.cantidad,
+                'costo': str(producto.costo),
+                'proveedor': producto.proveedor,
+                'porcentaje_ganancia': str(producto.porcentaje_ganancia),
                 'creado': producto.creado.strftime('%d/%m/%Y %H:%M')
             })
         except Exception as e:
@@ -96,6 +102,9 @@ class ProductoAjaxView(generics.GenericAPIView):
                     'descripcion': producto.descripcion,
                     'precio': str(producto.precio),
                     'cantidad': producto.cantidad,
+                    'costo': str(producto.costo),
+                    'proveedor': producto.proveedor,
+                    'porcentaje_ganancia': str(producto.porcentaje_ganancia),
                     'creado': producto.creado.strftime('%d/%m/%Y %H:%M')
                 })
             else:

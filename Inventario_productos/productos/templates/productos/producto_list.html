@@ -34,28 +34,46 @@
                         <p class="card-text text-muted fst-italic">Sin descripción</p>
                     {% endif %}
                     <div class="mt-auto">
-                         <div class="d-flex justify-content-between align-items-center">           
+                         <div class="d-flex justify-content-between align-items-center">
                             <span class="cantidad">Cantidad: {{ producto.cantidad }}</span>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center">        
+                        <div class="d-flex justify-content-between align-items-center">
                             <span class="price">${{ producto.precio }}</span>
                             <div class="btn-group" role="group">
-                                <button class="btn btn-sm btn-outline-primary" 
-                                        data-bs-toggle="modal" 
+                                <button class="btn btn-sm btn-outline-primary"
+                                        data-bs-toggle="modal"
                                         data-bs-target="#editProductModal"
                                         data-id="{{ producto.id }}"
                                         data-nombre="{{ producto.nombre }}"
                                         data-descripcion="{{ producto.descripcion }}"
                                         data-precio="{{ producto.precio }}"
-                                        data-cantidad="{{ producto.cantidad }}">
+                                        data-cantidad="{{ producto.cantidad }}"
+                                        data-costo="{{ producto.costo }}"
+                                        data-proveedor="{{ producto.proveedor }}"
+                                        data-porcentaje_ganancia="{{ producto.porcentaje_ganancia }}">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <a href="{% url 'producto-delete-html' producto.id %}" 
+                                <a href="{% url 'producto-delete-html' producto.id %}"
                                    class="btn btn-sm btn-outline-danger">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </div>
                         </div>
+                        {% if producto.costo %}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">Costo: ${{ producto.costo }}</small>
+                        </div>
+                        {% endif %}
+                        {% if producto.proveedor %}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">Proveedor: {{ producto.proveedor }}</small>
+                        </div>
+                        {% endif %}
+                        {% if producto.porcentaje_ganancia %}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">Ganancia: {{ producto.porcentaje_ganancia }}%</small>
+                        </div>
+                        {% endif %}
                         <small class="text-muted">
                             <i class="fas fa-calendar-alt"></i> 
                             Creado: {{ producto.creado|date:"d/m/Y H:i" }}
@@ -79,44 +97,160 @@
 
 <!-- Modal para Agregar Producto -->
 <div class="modal fade" id="addProductModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fas fa-plus text-success"></i> Agregar Nuevo Producto
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-gradient text-white" style="background: linear-gradient(135deg, #28a745, #20c997);">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-plus-circle fa-2x"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-0">Agregar Nuevo Producto</h4>
+                        <small class="opacity-75">Complete la información del producto</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <form id="addProductForm">
-                <div class="modal-body">
+                <div class="modal-body p-4">
                     {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre del Producto *</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="descripcion" class="form-label">Descripción</label>
-                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="precio" class="form-label">Precio *</label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input type="number" class="form-control" id="precio" name="precio" step="0.01" min="0" required>
+
+                    <!-- Información Básica -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-primary mb-3">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Información Básica
+                            </h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label fw-bold">
+                                    <i class="fas fa-tag text-primary me-1"></i>
+                                    Nombre del Producto *
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="nombre" name="nombre"
+                                       placeholder="Ej: Laptop Dell Inspiron" required>
+                                <div class="form-text">Nombre descriptivo del producto</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="proveedor" class="form-label fw-bold">
+                                    <i class="fas fa-truck text-info me-1"></i>
+                                    Proveedor
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="proveedor" name="proveedor"
+                                       placeholder="Ej: Tech Solutions S.A.">
+                                <div class="form-text">Empresa proveedora del producto</div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label fw-bold">
+                                    <i class="fas fa-align-left text-secondary me-1"></i>
+                                    Descripción
+                                </label>
+                                <textarea class="form-control" id="descripcion" name="descripcion" rows="3"
+                                          placeholder="Describe las características, especificaciones técnicas, etc."></textarea>
+                                <div class="form-text">Información adicional sobre el producto</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="cantidad" class="form-label">Cantidad *</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
-                            <input type="number" class="form-control" id="cantidad" name="cantidad" min="0" required>
+
+                    <!-- Información Financiera -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-success mb-3">
+                                <i class="fas fa-dollar-sign me-2"></i>
+                                Información Financiera
+                            </h6>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="costo" class="form-label fw-bold">
+                                    <i class="fas fa-money-bill-wave text-warning me-1"></i>
+                                    Costo
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="costo" name="costo"
+                                           step="0.01" min="0" placeholder="0.00">
+                                </div>
+                                <div class="form-text">Costo de adquisición</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="precio" class="form-label fw-bold">
+                                    <i class="fas fa-tags text-danger me-1"></i>
+                                    Precio de Venta *
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="precio" name="precio"
+                                           step="0.01" min="0" placeholder="0.00" required>
+                                </div>
+                                <div class="form-text">Precio al público</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="porcentaje_ganancia" class="form-label fw-bold">
+                                    <i class="fas fa-chart-line text-success me-1"></i>
+                                    % Ganancia
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <input type="number" class="form-control" id="porcentaje_ganancia"
+                                           name="porcentaje_ganancia" step="0.01" min="0" placeholder="0.00">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                                <div class="form-text">Margen de ganancia</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Inventario -->
+                    <div class="row">
+                        <div class="col-12">
+                            <h6 class="text-warning mb-3">
+                                <i class="fas fa-warehouse me-2"></i>
+                                Control de Inventario
+                            </h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="cantidad" class="form-label fw-bold">
+                                    <i class="fas fa-hashtag text-primary me-1"></i>
+                                    Cantidad Inicial *
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-boxes"></i>
+                                    </span>
+                                    <input type="number" class="form-control" id="cantidad" name="cantidad"
+                                           min="0" placeholder="0" required>
+                                </div>
+                                <div class="form-text">Unidades disponibles en stock</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light border-0">
+                                <div class="card-body text-center py-4">
+                                    <i class="fas fa-calculator fa-3x text-muted mb-2"></i>
+                                    <h6 class="text-muted">Cálculo Automático</h6>
+                                    <small class="text-muted">El sistema calculará automáticamente las ganancias basadas en costo y precio</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-save"></i> Agregar Producto
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-save me-2"></i>Agregar Producto
                     </button>
                 </div>
             </form>
@@ -126,45 +260,154 @@
 
 <!-- Modal para Editar Producto -->
 <div class="modal fade" id="editProductModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fas fa-edit text-primary"></i> Editar Producto
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-gradient text-white" style="background: linear-gradient(135deg, #007bff, #6610f2);">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-edit fa-2x"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-0">Editar Producto</h4>
+                        <small class="opacity-75">Modifique la información del producto</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <form id="editProductForm">
-                <div class="modal-body">
+                <div class="modal-body p-4">
                     {% csrf_token %}
                     <input type="hidden" id="edit-id" name="id">
-                    <div class="mb-3">
-                        <label for="edit-nombre" class="form-label">Nombre del Producto *</label>
-                        <input type="text" class="form-control" id="edit-nombre" name="nombre" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit-descripcion" class="form-label">Descripción</label>
-                        <textarea class="form-control" id="edit-descripcion" name="descripcion" rows="3"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit-precio" class="form-label">Precio *</label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input type="number" class="form-control" id="edit-precio" name="precio" step="0.01" min="0" required>
+
+                    <!-- Información Básica -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-primary mb-3">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Información Básica
+                            </h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit-nombre" class="form-label fw-bold">
+                                    <i class="fas fa-tag text-primary me-1"></i>
+                                    Nombre del Producto *
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="edit-nombre" name="nombre" required>
+                                <div class="form-text">Nombre descriptivo del producto</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit-proveedor" class="form-label fw-bold">
+                                    <i class="fas fa-truck text-info me-1"></i>
+                                    Proveedor
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="edit-proveedor" name="proveedor">
+                                <div class="form-text">Empresa proveedora del producto</div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="edit-descripcion" class="form-label fw-bold">
+                                    <i class="fas fa-align-left text-secondary me-1"></i>
+                                    Descripción
+                                </label>
+                                <textarea class="form-control" id="edit-descripcion" name="descripcion" rows="3"></textarea>
+                                <div class="form-text">Información adicional sobre el producto</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="edit-cantidad" class="form-label">Cantidad *</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
-                            <input type="number" class="form-control" id="edit-cantidad" name="cantidad" min="0" required>
+
+                    <!-- Información Financiera -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-success mb-3">
+                                <i class="fas fa-dollar-sign me-2"></i>
+                                Información Financiera
+                            </h6>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="edit-costo" class="form-label fw-bold">
+                                    <i class="fas fa-money-bill-wave text-warning me-1"></i>
+                                    Costo
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="edit-costo" name="costo" step="0.01" min="0">
+                                </div>
+                                <div class="form-text">Costo de adquisición</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="edit-precio" class="form-label fw-bold">
+                                    <i class="fas fa-tags text-danger me-1"></i>
+                                    Precio de Venta *
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="edit-precio" name="precio" step="0.01" min="0" required>
+                                </div>
+                                <div class="form-text">Precio al público</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="edit-porcentaje_ganancia" class="form-label fw-bold">
+                                    <i class="fas fa-chart-line text-success me-1"></i>
+                                    % Ganancia
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <input type="number" class="form-control" id="edit-porcentaje_ganancia" name="porcentaje_ganancia" step="0.01" min="0">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                                <div class="form-text">Margen de ganancia</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Inventario -->
+                    <div class="row">
+                        <div class="col-12">
+                            <h6 class="text-warning mb-3">
+                                <i class="fas fa-warehouse me-2"></i>
+                                Control de Inventario
+                            </h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit-cantidad" class="form-label fw-bold">
+                                    <i class="fas fa-hashtag text-primary me-1"></i>
+                                    Cantidad en Stock *
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-boxes"></i>
+                                    </span>
+                                    <input type="number" class="form-control" id="edit-cantidad" name="cantidad" min="0" required>
+                                </div>
+                                <div class="form-text">Unidades disponibles actualmente</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light border-0">
+                                <div class="card-body text-center py-4">
+                                    <i class="fas fa-sync-alt fa-3x text-muted mb-2"></i>
+                                    <h6 class="text-muted">Actualización</h6>
+                                    <small class="text-muted">Los cambios se aplicarán inmediatamente al guardar</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Actualizar Producto
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-save me-2"></i>Actualizar Producto
                     </button>
                 </div>
             </form>
@@ -187,24 +430,59 @@ document.addEventListener('DOMContentLoaded', function() {
         const productDesc = button.getAttribute('data-descripcion');
         const productPrice = button.getAttribute('data-precio');
         const productCantidad = button.getAttribute('data-cantidad');
-        
+        const productCosto = button.getAttribute('data-costo');
+        const productProveedor = button.getAttribute('data-proveedor');
+        const productPorcentajeGanancia = button.getAttribute('data-porcentaje_ganancia');
+
         document.getElementById('edit-id').value = productId;
         document.getElementById('edit-nombre').value = productName;
         document.getElementById('edit-descripcion').value = productDesc || '';
         document.getElementById('edit-precio').value = productPrice;
         document.getElementById('edit-cantidad').value = productCantidad;
+        document.getElementById('edit-costo').value = productCosto || '';
+        document.getElementById('edit-proveedor').value = productProveedor || '';
+        document.getElementById('edit-porcentaje_ganancia').value = productPorcentajeGanancia || '';
     });
+
+    // Función para mostrar alertas
+    function showAlert(message, type = 'success') {
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type} alert-dismissible fade show shadow`;
+        alert.innerHTML = `
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.querySelector('.container').insertBefore(alert, document.querySelector('.container').firstChild);
+
+        // Auto-remover después de 5 segundos
+        setTimeout(() => {
+            if (alert.parentNode) {
+                alert.remove();
+            }
+        }, 5000);
+    }
 
     // Manejar envío del formulario de agregar producto
     document.getElementById('addProductForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const formData = new FormData(this);
         const submitBtn = this.querySelector('button[type="submit"]');
-        
+
+        // Validación básica
+        const nombre = formData.get('nombre');
+        const precio = formData.get('precio');
+        const cantidad = formData.get('cantidad');
+
+        if (!nombre || !precio || !cantidad) {
+            showAlert('Por favor complete todos los campos obligatorios.', 'warning');
+            return;
+        }
+
         // Mostrar estado de carga
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Agregando...';
-        
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Agregando producto...';
+
         fetch('/ajax/productos/', {
             method: 'POST',
             body: formData,
@@ -215,30 +493,24 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.id) {
-                // Mostrar mensaje de éxito
-                const alert = document.createElement('div');
-                alert.className = 'alert alert-success alert-dismissible fade show';
-                alert.innerHTML = `
-                    <i class="fas fa-check-circle"></i> Producto "${data.nombre}" agregado exitosamente.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                `;
-                document.querySelector('.container').insertBefore(alert, document.querySelector('.container').firstChild);
-                
+                showAlert(`Producto "${data.nombre}" agregado exitosamente.`, 'success');
+
                 // Cerrar modal y recargar
                 bootstrap.Modal.getInstance(document.getElementById('addProductModal')).hide();
-                setTimeout(() => location.reload(), 1000);
+                this.reset(); // Limpiar formulario
+                setTimeout(() => location.reload(), 1500);
             } else {
                 throw new Error('Error en la respuesta del servidor');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error al agregar el producto. Por favor, verifica los datos e inténtalo de nuevo.');
+            showAlert('Error al agregar el producto. Por favor, verifica los datos e inténtalo de nuevo.', 'danger');
         })
         .finally(() => {
             // Restaurar botón
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fas fa-save"></i> Agregar Producto';
+            submitBtn.innerHTML = '<i class="fas fa-save me-2"></i>Agregar Producto';
         });
     });
 
@@ -248,17 +520,27 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(this);
         const productId = document.getElementById('edit-id').value;
         const submitBtn = this.querySelector('button[type="submit"]');
-        
+
+        // Validación básica
+        const nombre = formData.get('nombre');
+        const precio = formData.get('precio');
+        const cantidad = formData.get('cantidad');
+
+        if (!nombre || !precio || !cantidad) {
+            showAlert('Por favor complete todos los campos obligatorios.', 'warning');
+            return;
+        }
+
         // Mostrar estado de carga
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualizando...';
-        
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Actualizando producto...';
+
         // Convertir FormData a JSON para PUT request
         const data = {};
         formData.forEach((value, key) => {
             data[key] = value;
         });
-        
+
         fetch(`/ajax/productos/${productId}/`, {
             method: 'PUT',
             body: JSON.stringify(data),
@@ -270,30 +552,23 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.id) {
-                // Mostrar mensaje de éxito
-                const alert = document.createElement('div');
-                alert.className = 'alert alert-success alert-dismissible fade show';
-                alert.innerHTML = `
-                    <i class="fas fa-check-circle"></i> Producto "${data.nombre}" actualizado exitosamente.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                `;
-                document.querySelector('.container').insertBefore(alert, document.querySelector('.container').firstChild);
-                
+                showAlert(`Producto "${data.nombre}" actualizado exitosamente.`, 'success');
+
                 // Cerrar modal y recargar
                 bootstrap.Modal.getInstance(document.getElementById('editProductModal')).hide();
-                setTimeout(() => location.reload(), 1000);
+                setTimeout(() => location.reload(), 1500);
             } else {
                 throw new Error('Error en la respuesta del servidor');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error al actualizar el producto. Por favor, verifica los datos e inténtalo de nuevo.');
+            showAlert('Error al actualizar el producto. Por favor, verifica los datos e inténtalo de nuevo.', 'danger');
         })
         .finally(() => {
             // Restaurar botón
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fas fa-save"></i> Actualizar Producto';
+            submitBtn.innerHTML = '<i class="fas fa-save me-2"></i>Actualizar Producto';
         });
     });
 
