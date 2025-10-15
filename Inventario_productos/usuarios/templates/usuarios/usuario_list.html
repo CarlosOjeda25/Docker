@@ -1,0 +1,460 @@
+{% extends 'usuarios/base.html' %}
+
+{% block title %}Lista de Usuarios - Gestión{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">
+        <i class="fas fa-users text-primary"></i>
+        Lista de Usuarios
+    </h1>
+    <div>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUsuarioModal">
+            <i class="fas fa-plus"></i> Agregar Usuario
+        </button>
+        <a href="/api/usuarios/" class="btn btn-outline-info">
+            <i class="fas fa-code"></i> Ver API
+        </a>
+    </div>
+</div>
+
+{% if usuarios %}
+    <div class="row">
+        {% for usuario in usuarios %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card usuario-card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">
+                        <i class="fas fa-user text-primary"></i>
+                        {{ usuario.nombre }} {{ usuario.apellido }}
+                    </h5>
+                    <div class="mt-auto">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="edad"><strong>Edad:</strong> {{ usuario.edad }} años</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="email"><strong>Email:</strong> {{ usuario.email }}</span>
+                        </div>
+                        {% if usuario.telefono %}
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="telefono"><strong>Teléfono:</strong> {{ usuario.telefono }}</span>
+                        </div>
+                        {% endif %}
+                        {% if usuario.direccion %}
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="direccion"><strong>Dirección:</strong> {{ usuario.direccion }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-sm btn-outline-primary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editUsuarioModal"
+                                    data-id="{{ usuario.id }}"
+                                    data-nombre="{{ usuario.nombre }}"
+                                    data-apellido="{{ usuario.apellido }}"
+                                    data-edad="{{ usuario.edad }}"
+                                    data-email="{{ usuario.email }}"
+                                    data-telefono="{{ usuario.telefono }}"
+                                    data-direccion="{{ usuario.direccion }}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <a href="{% url 'usuario-delete-html' usuario.id %}"
+                               class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                        <small class="text-muted">
+                            <i class="fas fa-calendar-alt"></i>
+                            Creado: {{ usuario.fecha_creacion|date:"d/m/Y H:i" }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center py-5">
+        <i class="fas fa-users fa-5x text-muted mb-3"></i>
+        <h3 class="text-muted">No hay usuarios registrados</h3>
+        <p class="text-muted">Comienza agregando tu primer usuario</p>
+        <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#addUsuarioModal">
+            <i class="fas fa-plus"></i> Agregar Primer Usuario
+        </button>
+    </div>
+{% endif %}
+
+<!-- Modal para Agregar Usuario -->
+<div class="modal fade" id="addUsuarioModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-gradient text-white" style="background: linear-gradient(135deg, #28a745, #20c997);">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-plus-circle fa-2x"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-0">Agregar Nuevo Usuario</h4>
+                        <small class="opacity-75">Complete la información del usuario</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="addUsuarioForm">
+                <div class="modal-body p-4">
+                    {% csrf_token %}
+
+                    <!-- Información Personal -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-primary mb-3">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Información Personal
+                            </h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label fw-bold">
+                                    <i class="fas fa-user text-primary me-1"></i>
+                                    Nombre *
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="nombre" name="nombre"
+                                       placeholder="Ej: Juan" required>
+                                <div class="form-text">Nombre del usuario</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="apellido" class="form-label fw-bold">
+                                    <i class="fas fa-user text-info me-1"></i>
+                                    Apellido *
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="apellido" name="apellido"
+                                       placeholder="Ej: Pérez" required>
+                                <div class="form-text">Apellido del usuario</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edad" class="form-label fw-bold">
+                                    <i class="fas fa-birthday-cake text-warning me-1"></i>
+                                    Edad *
+                                </label>
+                                <input type="number" class="form-control form-control-lg" id="edad" name="edad"
+                                       min="1" placeholder="25" required>
+                                <div class="form-text">Edad en años</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email" class="form-label fw-bold">
+                                    <i class="fas fa-envelope text-danger me-1"></i>
+                                    Email *
+                                </label>
+                                <input type="email" class="form-control form-control-lg" id="email" name="email"
+                                       placeholder="usuario@example.com" required>
+                                <div class="form-text">Correo electrónico único</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="telefono" class="form-label fw-bold">
+                                    <i class="fas fa-phone text-success me-1"></i>
+                                    Teléfono
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="telefono" name="telefono"
+                                       placeholder="Ej: +57 300 123 4567">
+                                <div class="form-text">Número de teléfono (opcional)</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="direccion" class="form-label fw-bold">
+                                    <i class="fas fa-map-marker-alt text-secondary me-1"></i>
+                                    Dirección
+                                </label>
+                                <textarea class="form-control" id="direccion" name="direccion" rows="2"
+                                          placeholder="Dirección completa"></textarea>
+                                <div class="form-text">Dirección de residencia (opcional)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-save me-2"></i>Agregar Usuario
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Editar Usuario -->
+<div class="modal fade" id="editUsuarioModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-gradient text-white" style="background: linear-gradient(135deg, #007bff, #6610f2);">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-edit fa-2x"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-0">Editar Usuario</h4>
+                        <small class="opacity-75">Modifique la información del usuario</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editUsuarioForm">
+                <div class="modal-body p-4">
+                    {% csrf_token %}
+                    <input type="hidden" id="edit-id" name="id">
+
+                    <!-- Información Personal -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-primary mb-3">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Información Personal
+                            </h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit-nombre" class="form-label fw-bold">
+                                    <i class="fas fa-user text-primary me-1"></i>
+                                    Nombre *
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="edit-nombre" name="nombre" required>
+                                <div class="form-text">Nombre del usuario</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit-apellido" class="form-label fw-bold">
+                                    <i class="fas fa-user text-info me-1"></i>
+                                    Apellido *
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="edit-apellido" name="apellido" required>
+                                <div class="form-text">Apellido del usuario</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit-edad" class="form-label fw-bold">
+                                    <i class="fas fa-birthday-cake text-warning me-1"></i>
+                                    Edad *
+                                </label>
+                                <input type="number" class="form-control form-control-lg" id="edit-edad" name="edad" min="1" required>
+                                <div class="form-text">Edad en años</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit-email" class="form-label fw-bold">
+                                    <i class="fas fa-envelope text-danger me-1"></i>
+                                    Email *
+                                </label>
+                                <input type="email" class="form-control form-control-lg" id="edit-email" name="email" required>
+                                <div class="form-text">Correo electrónico único</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit-telefono" class="form-label fw-bold">
+                                    <i class="fas fa-phone text-success me-1"></i>
+                                    Teléfono
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="edit-telefono" name="telefono">
+                                <div class="form-text">Número de teléfono</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit-direccion" class="form-label fw-bold">
+                                    <i class="fas fa-map-marker-alt text-secondary me-1"></i>
+                                    Dirección
+                                </label>
+                                <textarea class="form-control" id="edit-direccion" name="direccion" rows="2"></textarea>
+                                <div class="form-text">Dirección de residencia</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-save me-2"></i>Actualizar Usuario
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Configurar modal de edición
+    const editModal = document.getElementById('editUsuarioModal');
+    editModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const usuarioId = button.getAttribute('data-id');
+        const usuarioNombre = button.getAttribute('data-nombre');
+        const usuarioApellido = button.getAttribute('data-apellido');
+        const usuarioEdad = button.getAttribute('data-edad');
+        const usuarioEmail = button.getAttribute('data-email');
+        const usuarioTelefono = button.getAttribute('data-telefono');
+        const usuarioDireccion = button.getAttribute('data-direccion');
+
+        document.getElementById('edit-id').value = usuarioId;
+        document.getElementById('edit-nombre').value = usuarioNombre;
+        document.getElementById('edit-apellido').value = usuarioApellido;
+        document.getElementById('edit-edad').value = usuarioEdad;
+        document.getElementById('edit-email').value = usuarioEmail;
+        document.getElementById('edit-telefono').value = usuarioTelefono || '';
+        document.getElementById('edit-direccion').value = usuarioDireccion || '';
+    });
+
+    // Función para mostrar alertas
+    function showAlert(message, type = 'success') {
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type} alert-dismissible fade show shadow`;
+        alert.innerHTML = `
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.querySelector('.container').insertBefore(alert, document.querySelector('.container').firstChild);
+
+        // Auto-remover después de 5 segundos
+        setTimeout(() => {
+            if (alert.parentNode) {
+                alert.remove();
+            }
+        }, 5000);
+    }
+
+    // Manejar envío del formulario de agregar usuario
+    document.getElementById('addUsuarioForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const submitBtn = this.querySelector('button[type="submit"]');
+
+        // Validación básica
+        const nombre = formData.get('nombre');
+        const apellido = formData.get('apellido');
+        const edad = formData.get('edad');
+        const email = formData.get('email');
+
+        if (!nombre || !apellido || !edad || !email) {
+            showAlert('Por favor complete todos los campos obligatorios.', 'warning');
+            return;
+        }
+
+        // Mostrar estado de carga
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Agregando usuario...';
+
+        fetch('/usuarios/ajax/usuarios/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.id) {
+                showAlert(`Usuario "${data.nombre} ${data.apellido}" agregado exitosamente.`, 'success');
+
+                // Cerrar modal y recargar
+                bootstrap.Modal.getInstance(document.getElementById('addUsuarioModal')).hide();
+                this.reset(); // Limpiar formulario
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                throw new Error('Error en la respuesta del servidor');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showAlert('Error al agregar el usuario. Por favor, verifica los datos e inténtalo de nuevo.', 'danger');
+        })
+        .finally(() => {
+            // Restaurar botón
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-save me-2"></i>Agregar Usuario';
+        });
+    });
+
+    // Manejar envío del formulario de editar usuario
+    document.getElementById('editUsuarioForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const usuarioId = document.getElementById('edit-id').value;
+        const submitBtn = this.querySelector('button[type="submit"]');
+
+        // Validación básica
+        const nombre = formData.get('nombre');
+        const apellido = formData.get('apellido');
+        const edad = formData.get('edad');
+        const email = formData.get('email');
+
+        if (!nombre || !apellido || !edad || !email) {
+            showAlert('Por favor complete todos los campos obligatorios.', 'warning');
+            return;
+        }
+
+        // Mostrar estado de carga
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Actualizando usuario...';
+
+        // Convertir FormData a JSON para PUT request
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+
+        fetch(`/usuarios/ajax/usuarios/${usuarioId}/`, {
+            method: 'PUT',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.id) {
+                showAlert(`Usuario "${data.nombre} ${data.apellido}" actualizado exitosamente.`, 'success');
+
+                // Cerrar modal y recargar
+                bootstrap.Modal.getInstance(document.getElementById('editUsuarioModal')).hide();
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                throw new Error('Error en la respuesta del servidor');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showAlert('Error al actualizar el usuario. Por favor, verifica los datos e inténtalo de nuevo.', 'danger');
+        })
+        .finally(() => {
+            // Restaurar botón
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-save me-2"></i>Actualizar Usuario';
+        });
+    });
+
+
+});
+</script>
+{% endblock %}
