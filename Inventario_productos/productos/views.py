@@ -41,10 +41,12 @@ class ProductoDeleteView(DeleteView):
     success_url = reverse_lazy('producto-list-html')
     context_object_name = 'producto'
 
-    def delete(self, request, *args, **kwargs):
+    def form_valid(self, form):
         producto = self.get_object()
-        messages.success(request, f'El Producto "{producto.nombre}" eliminado exitosamente.')
-        return super().delete(request, *args, **kwargs)
+        print("----------------------------------------------------")
+        print(f'Delete request received - Eliminando producto: {producto.nombre} (ID: {producto.id})')
+        messages.success(self.request, f'El Producto "{producto.nombre}" eliminado exitosamente.')
+        return super().form_valid(form)
     
 # vista para manejar ajax
 
@@ -55,6 +57,9 @@ class ProductoAjaxView(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         """Crear nuevo producto via AJAX"""
+        print("*************************************************")
+        print("POST request received - Creando nuevo producto")
+        print(request.body)
         try:
             data ={
                 'nombre': request.POST.get('nombre'),
