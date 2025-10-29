@@ -1,9 +1,10 @@
 from django.urls import path,include
-from .views import UsuarioListAPIView, UsuarioDeleteAPIView, UsuarioListView, UsuarioDeleteView, DemoView, UsuarioAjaxView
+from .views import UsuarioListAPIView,UsuarioDetailAPIView, UsuarioDeleteAPIView, UsuarioListView, UsuarioDeleteView, DemoView, UsuarioAjaxView
 
 urlpatterns = [
     #API Endpoints
     path('api/usuarios/', UsuarioListAPIView.as_view(), name='usuario-list-api'),
+    path('api/usuarios/<int:pk>/', UsuarioDetailAPIView.as_view(), name='usuario-detail-api'),
     path('api/usuarios/<int:pk>/delete', UsuarioDeleteAPIView.as_view(), name='usuario-delete-api'),
 
     #AJAX Endpoints para el frontend
