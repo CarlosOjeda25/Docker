@@ -105,8 +105,8 @@
                         <i class="fas fa-plus-circle fa-2x"></i>
                     </div>
                     <div>
-                        <h4 class="mb-0">Agregar Nuevo Producto</h4>
-                        <small class="opacity-75">Complete la información del producto</small>
+                        <h4 class="mb-0 text-dark">Agregar Nuevo Producto</h4>
+                        <small class="opacity-75 text-dark">Complete la información del producto</small>
                     </div>
                 </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
@@ -202,7 +202,7 @@
                                 </label>
                                 <div class="input-group input-group-lg">
                                     <input type="number" class="form-control" id="porcentaje_ganancia"
-                                           name="porcentaje_ganancia" step="0.01" min="0" placeholder="0.00">
+                                           name="porcentaje_ganancia" step="0.01" min="0" placeholder="0.00" disabled>
                                     <span class="input-group-text">%</span>
                                 </div>
                                 <div class="form-text">Margen de ganancia</div>
@@ -268,8 +268,8 @@
                         <i class="fas fa-edit fa-2x"></i>
                     </div>
                     <div>
-                        <h4 class="mb-0">Editar Producto</h4>
-                        <small class="opacity-75">Modifique la información del producto</small>
+                        <h4 class="mb-0 text-dark">Editar Producto</h4>
+                        <small class="opacity-75 text-dark">Modifique la información del producto</small>
                     </div>
                 </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
@@ -360,7 +360,7 @@
                                     % Ganancia
                                 </label>
                                 <div class="input-group input-group-lg">
-                                    <input type="number" class="form-control" id="edit-porcentaje_ganancia" name="porcentaje_ganancia" step="0.01" min="0">
+                                    <input type="number" class="form-control" id="edit-porcentaje_ganancia" name="porcentaje_ganancia" step="0.01" min="0" disabled>
                                     <span class="input-group-text">%</span>
                                 </div>
                                 <div class="form-text">Margen de ganancia</div>
@@ -421,6 +421,36 @@
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Función para calcular porcentaje de ganancia
+    function calcularGanancia() {
+        const costo = parseFloat(document.getElementById('costo').value) || 0;
+        const precio = parseFloat(document.getElementById('precio').value) || 0;
+
+        if (costo > 0 && precio > 0) {
+            const ganancia = ((precio - costo) / costo) * 100;
+            document.getElementById('porcentaje_ganancia').value = ganancia.toFixed(2);
+        } else {
+            document.getElementById('porcentaje_ganancia').value = '';
+        }
+    }
+
+    // Función para calcular ganancia en edición
+    function calcularGananciaEdicion() {
+        const costo = parseFloat(document.getElementById('edit-costo').value) || 0;
+        const precio = parseFloat(document.getElementById('edit-precio').value) || 0;
+
+        if (costo > 0 && precio > 0) {
+            const ganancia = ((precio - costo) / costo) * 100;
+            document.getElementById('edit-porcentaje_ganancia').value = ganancia.toFixed(2);
+        } else {
+            document.getElementById('edit-porcentaje_ganancia').value = '';
+        }
+    }
+
+    // Agregar event listeners para cálculo automático
+    document.getElementById('costo').addEventListener('input', calcularGanancia);
+    document.getElementById('precio').addEventListener('input', calcularGanancia);
+
     // Configurar modal de edición
     const editModal = document.getElementById('editProductModal');
     editModal.addEventListener('show.bs.modal', function(event) {
@@ -442,6 +472,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('edit-costo').value = productCosto || '';
         document.getElementById('edit-proveedor').value = productProveedor || '';
         document.getElementById('edit-porcentaje_ganancia').value = productPorcentajeGanancia || '';
+
+        // Agregar event listeners para edición
+        document.getElementById('edit-costo').addEventListener('input', calcularGananciaEdicion);
+        document.getElementById('edit-precio').addEventListener('input', calcularGananciaEdicion);
     });
 
     // Función para mostrar alertas
