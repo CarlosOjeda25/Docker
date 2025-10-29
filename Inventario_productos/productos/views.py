@@ -32,22 +32,21 @@ class ProductoListAPIView(generics.ListCreateAPIView):
                     'details': str(e)
             }, status=500)
 
-
 #Detalle Producto
 class ProductoDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
 
-    def retrive(self, request, *args, **kwargs):
+    def retrieve(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
             serializer = self.get_serializer(instance)
             return JsonResponse(serializer.data, status=200)
+        except Producto.DoesNotExist:
+            return JsonResponse({'error': 'Producto no encontrado.'}, status=404)
         except Exception as e:
-            return JsonResponse({
-                'error': 'Producto no encontrado.',
-                'details': str(e)
-            }, status=404)
+            return JsonResponse({'error': 'Error inesperado.', 'details': str(e)}, status=500)
+
     
     def update(self, request, *args, **kwargs):
         try:

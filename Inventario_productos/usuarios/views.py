@@ -37,7 +37,7 @@ class UsuarioDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
 
-    def retrive(self, request, *args, **kwargs):
+    def retrieve(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
             serializer = self.get_serializer(instance)
