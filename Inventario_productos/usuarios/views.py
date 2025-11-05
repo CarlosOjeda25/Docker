@@ -9,6 +9,10 @@ from django.utils.decorators import method_decorator
 from .models import Usuario
 from .serializers import UsuarioSerializer
 from rest_framework import generics
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework import viewsets, decorators
 
 
 # Listar Usuarios
@@ -75,6 +79,43 @@ class UsuarioDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         except Exception as e:
             return JsonResponse({'error': 'Error interno del servidor.', 'details': str(e)}, status=500)
 
+
+    def post(self, request, *args, **kwargs):
+        usuario = self.get_object()
+        letra = request.data.get('letra')
+
+        if not usuario.palabra_clave or getattr(usuario, 'estado_juego', 'jugando') == 'completado':
+            return Response({
+                'mensaje': 'El juego ya ha sido completado. No puedes enviar más letras.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        if not letra or len(letra) != 1:
+            return Response({'error': 'Debe enviar una letra única.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        palabra = usuario.palabra_clave.lower()
+        letra = letra.lower()
+
+        if letra in palabra:
+            nueva = palabra.replace(letra, '')
+            usuario.palabra_clave = nueva
+
+            if not nueva:
+                usuario.estado_juego = 'completado' 
+                usuario.save()
+                return Response({
+                    'mensaje': '¡Felicidades! Has adivinado toda la palabra.',
+                    'estado': 'completado'
+                }, status=status.HTTP_200_OK)
+
+            usuario.save()
+            return Response({
+                'mensaje': f'Letra "{letra}" encontrada.',
+                'restante': usuario.palabra_clave
+            }, status=status.HTTP_200_OK)
+
+        return Response({
+            'error': f'La letra "{letra}" no está en la palabra.'
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 #Eliminar Usuario
 class UsuarioDeleteAPIView(generics.DestroyAPIView):
@@ -173,3 +214,6 @@ class UsuarioAjaxView(generics.GenericAPIView):
                 return JsonResponse(serializer.errors, status=400)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
+
+
+

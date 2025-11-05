@@ -16,4 +16,7 @@ urlpatterns = [
     path('usuarios/<int:pk>/delete/', UsuarioDeleteView.as_view(), name='usuario-delete-html'),
     path('demo/', DemoView.as_view(), name='demo'),
     path('',UsuarioListView.as_view(), name='home'),
+
+    # API Ahorcado
+    path('api/usuarios/<int:pk>/ahorcado/', UsuarioDetailAPIView.as_view(), name='usuario-ahorcado-api'),
 ]
