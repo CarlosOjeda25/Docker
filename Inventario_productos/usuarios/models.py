@@ -12,7 +12,7 @@ class Usuario(models.Model):
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     estado_juego = models.CharField(
     max_length=20,
-    default='jugando',  # valores posibles: 'jugando' o 'completado'
+    default='jugando',
     choices=[('jugando', 'Jugando'), ('completado', 'Completado')]
 )
 

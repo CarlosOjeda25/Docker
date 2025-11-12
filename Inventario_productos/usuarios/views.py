@@ -82,7 +82,8 @@ class UsuarioDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
     def post(self, request, *args, **kwargs):
         usuario = self.get_object()
-        letra = request.data.get('letra')
+        letra = str(request.data.get('letra'))
+
 
         if not usuario.palabra_clave or getattr(usuario, 'estado_juego', 'jugando') == 'completado':
             return Response({
