@@ -84,7 +84,6 @@ class UsuarioDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         usuario = self.get_object()
         letra = str(request.data.get('letra'))
 
-
         if not usuario.palabra_clave or getattr(usuario, 'estado_juego', 'jugando') == 'completado':
             return Response({
                 'mensaje': 'El juego ya ha sido completado. No puedes enviar más letras.'
